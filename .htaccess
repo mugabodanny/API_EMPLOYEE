@@ -1,0 +1,17 @@
+# Fix for Apache AUTHORIZATION http header as it is stripped by default for security and should be
+# enabled explicity when needed
+SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
+
+Options -Indexes
+
+RewriteEngine On    # Turn on the rewriting engine
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Authentication
+RewriteRule    ^sessions/([0-9]+)$          controller/sessions.php?sessionid=$1    [L]    # Handle session id requests
+RewriteRule    ^sessions$      controller/sessions.php      [L]    # Handle login requests
+
+
+# Users
+RewriteRule    ^users$      controller/Users.php      [L]    # Handle user requests
